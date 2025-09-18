@@ -31,5 +31,6 @@ The automation pipeline consists of four main steps:
 
 ### Workflow Screenshot
 
-<img width="1918" height="787" alt="image" src="https://github.com/user-attachments/assets/822b708b-5cc4-49df-b2fa-7e9023c3da93" />
+<img width="1669" height="786" alt="image" src="https://github.com/user-attachments/assets/0477d7f8-e9e0-42c8-96b7-aec421e008cc" />
+
 
