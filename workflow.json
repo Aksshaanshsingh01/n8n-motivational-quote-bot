@@ -1,0 +1,119 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            },
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e3c8ce18-319d-456e-8503-8be3e914df9a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.quotable.io/random",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e202def5-0d1e-43a9-8fa2-552e9a21f91b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fromEmail": "akshtheman@gmail.com",
+        "toEmail": "singhakshaansh2005@gmail.com",
+        "subject": "Your Daily Dose Of Motivation",
+        "emailFormat": "text",
+        "text": "={{ $('Code').item.json.quote_text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        0
+      ],
+      "id": "b4008c62-ca31-40f8-8051-c2da48b03628",
+      "name": "Send email",
+      "webhookId": "1c74ac37-4dc3-46f7-9fb0-4fdcf1e671e9",
+      "credentials": {
+        "smtp": {
+          "id": "lqqcT2bQuU2KrJBy",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Get the data from the previous HTTP Request node\n# We add .to_py() to convert it into a real Python dictionary\ndata = items[0].json.to_py()\n\n# Format the quote and author into a clean string\nformatted_quote = f\"\\\"{data['content']}\\\"\\n\\n- {data['author']}\"\n\n# Return the formatted text for the email node\nreturn [{'json': {'quote_text': formatted_quote}}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "6b95171b-0639-447a-8e91-acd5c31a9378",
+      "name": "Code"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a2924c9e3244c31fbe81688524f64e4d77d893711e3fac95e16605153526e6e5"
+  }
+}
